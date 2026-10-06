@@ -2,7 +2,11 @@
   "id": "bolt",
   "name": "Magic Bolt",
   "icon": "ui/spells/magic-bolt.png",
-  "effect": "wand_projectile",
+  "effect": "projectile",
+  "damage": 4,
+  "speed": 10,
+  "lifetime": 4,
+  "color": "80BFFF",
   "manaCost": 4,
   "requires": []
 }

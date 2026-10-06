@@ -67,5 +67,5 @@ for path, page in pages.items():
             assert len(keys) == len(set(keys)), f'Duplicate requirement keys: {id}'
         blocks += 1
 assert blocks == 6, f'Expected six examples, found {blocks}'
-assert mod_blocks == 9, f'Expected nine current mod examples, found {mod_blocks}'
+assert mod_blocks == 10, f'Expected ten current mod examples, found {mod_blocks}'
 print(f'PASS: {len(pages)} pages, local links and anchors, {blocks} legacy and {mod_blocks} current copyable JSON examples matching downloads.')

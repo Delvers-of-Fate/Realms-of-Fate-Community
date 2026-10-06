@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Realms of Fate Delver mod prototype: Spells, icons and wands"><title>Spells, icons and wands · Realms of Fate</title><link rel="stylesheet" href="../assets/wiki.css"><script src="../assets/wiki.js" defer></script></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Realms of Fate Delver mod prototype: Spells, icons and wands"><title>Spells, icons and wands Â· Realms of Fate</title><link rel="stylesheet" href="../assets/wiki.css"><script src="../assets/wiki.js" defer></script></head><body>
 <a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="brand" href="../index.html">Realms of Fate <span>Community</span></a><nav aria-label="Site"><a href="../index.html">Home</a><a href="installation.html">Installation</a><a href="index.html">Modding wiki</a><a href="https://github.com/Delvers-of-Fate/Realms-of-Fate-Community">GitHub</a></nav></header>
 <div class="layout"><nav class="sidebar" aria-label="Wiki navigation"><p class="nav-heading">Delver mod prototype</p><a href="index.html">Overview</a><a href="installation.html">Install & restore</a><a href="spells.html" class="current" aria-current="page">Spells & wands</a><a href="systems.html">Classes & currencies</a><a href="editor.html">Editor & startup</a><p class="nav-heading">Archive</p><a href="achievements.html">Legacy engine achievements</a></nav><main id="main" class="article"><p class="breadcrumb">Wiki / Delver mod prototype</p><h1>Spells, icons and wands</h1>
 <p>Each spell lives in its own JSON file. A wand lists spell IDs, the HUD reads their icons, R changes the selected index, and attack runs the selected effect after checking mana.</p>
@@ -16,12 +16,16 @@
   &quot;id&quot;: &quot;bolt&quot;,
   &quot;name&quot;: &quot;Magic Bolt&quot;,
   &quot;icon&quot;: &quot;ui/spells/magic-bolt.png&quot;,
-  &quot;effect&quot;: &quot;wand_projectile&quot;,
+  &quot;effect&quot;: &quot;projectile&quot;,
+  &quot;damage&quot;: 4,
+  &quot;speed&quot;: 10,
+  &quot;lifetime&quot;: 4,
+  &quot;color&quot;: &quot;80BFFF&quot;,
   &quot;manaCost&quot;: 4,
   &quot;requires&quot;: []
 }
 </code></pre>
-<h2>Field reference</h2><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr><td>id</td><td>Unique stable ID; lowercase letters, digits, underscores or hyphens, starting with a letter/digit.</td></tr><tr><td>name</td><td>Nonempty display name, at most 60 characters.</td></tr><tr><td>effect</td><td><code>heal</code> or <code>wand_projectile</code>. Other behaviors need Java implementation.</td></tr><tr><td>manaCost</td><td>Positive integer mana spent per cast.</td></tr><tr><td>healAmount</td><td>Positive integer required for heal; capped by missing HP.</td></tr><tr><td>icon</td><td>Optional PNG path under <code>ui/spells/</code>. Missing/broken images use a fallback and log once.</td></tr><tr><td>requires</td><td>Optional prerequisite ID array. References are checked; unlocking is not enforced yet.</td></tr></tbody></table>
+<h2>Field reference</h2><table><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr><td>id</td><td>Unique stable ID; lowercase letters, digits, underscores or hyphens, starting with a letter/digit.</td></tr><tr><td>name</td><td>Nonempty display name, at most 60 characters.</td></tr><tr><td>effect</td><td><code>heal</code>, <code>projectile</code>, <code>homing_projectile</code>, or legacy <code>wand_projectile</code>.</td></tr><tr><td>manaCost</td><td>Positive integer mana spent per cast.</td></tr><tr><td>healAmount</td><td>Positive integer required for heal; capped by missing HP.</td></tr><tr><td>icon</td><td>Optional PNG path under <code>ui/spells/</code>. Missing/broken images use a fallback and log once.</td></tr><tr><td>requires</td><td>Optional prerequisite ID array. References are checked; unlocking is not enforced yet.</td></tr></tbody></table>
 <h2>Connect a wand</h2><p>This is an item object for a class's <code>startingItems</code>, a shop offer's <code>item</code>, or an item preset in <code>data/entities.dat</code>. It is not a standalone file the game automatically loads.</p><p><button type="button" data-copy="code-wand">Copy JSON</button> <a href="../examples/mod/wand.json" download>Download JSON</a></p><pre><code class="language-json" id="code-wand" data-download="../examples/mod/wand.json">{
   &quot;class&quot;: &quot;com.realmsoffate.classes.ManaWand&quot;,
   &quot;name&quot;: &quot;Apprentice Focus&quot;,
@@ -46,6 +50,23 @@
   ]
 }
 </code></pre>
-<h2>Draw your own icons</h2><p>Create original transparent PNGs, preferably 16×16 pixels. Put them in <code>ui/spells/</code>, set the JSON icon path, and restart. Nearest-neighbor filtering keeps the pixels crisp. The bundled Bolt and Heal icons are original work. PNG changes do not require compilation.</p>
-<h2>Projectile limitation</h2><p><code>wand_projectile</code> currently uses the projectile configured on the wand itself. A JSON file called frost-bolt does not make a frost projectile. Distinct per-spell projectiles, homing, bouncing, piercing and summons are future Java work; fields such as targetRange or turnRate are not supported yet.</p>
-<h2>Migration and validation</h2><p>Definition edits affect saved wands after restarting. Preset spell-list edits affect newly created items; saved wands retain their IDs and selection. Old per-wand <code>manaCost</code>, <code>healManaCost</code> and <code>healAmount</code> fields remain readable but JSON now supersedes them. Put custom values in separate definitions and reference their IDs.</p><p>Definitions load from enabled mods in sorted filename order within each directory. Duplicate IDs are rejected. Invalid definitions fail the startup spell check and disable casting until corrected and restarted. Skill trees, point spending and permanent unlocks are not implemented.</p><p id="copy-status" role="status" aria-live="polite"></p></main></div><footer><span>Realms of Fate modding wiki</span><span>Checked against the mod implementation · October 6, 2026</span></footer></body></html>
+<h2>Draw your own icons</h2><p>Create original transparent PNGs, preferably 16Ã—16 pixels. Put them in <code>ui/spells/</code>, set the JSON icon path, and restart. Nearest-neighbor filtering keeps the pixels crisp. The bundled Bolt and Heal icons are original work. PNG changes do not require compilation.</p>
+<h2>Per-spell projectiles and Seeking Missile</h2><p>Bolt now uses a straight <code>projectile</code>; Seeking Missile uses <code>homing_projectile</code>. Each owns its damage, speed, lifetime and color. The wand's damage roll does not override these definitions. The legacy <code>wand_projectile</code> effect still uses the wand's projectile.</p>
+<p>Save this as <code>data/spells/seeking-missile.json</code>. Place <strong>Seeker Focus</strong> under Realms of Fate Classes in DelvEdit for a wand with Bolt, Heal and Seeking Missile. Existing saved wands retain their lists.</p>
+<p><button type="button" data-copy="code-seeking-missile">Copy JSON</button> <a href="../examples/mod/seeking-missile.json" download>Download JSON</a></p><pre><code class="language-json" id="code-seeking-missile" data-download="../examples/mod/seeking-missile.json">{
+  &quot;id&quot;: &quot;seeking_missile&quot;,
+  &quot;name&quot;: &quot;Seeking Missile&quot;,
+  &quot;icon&quot;: &quot;ui/spells/seeking-missile.png&quot;,
+  &quot;effect&quot;: &quot;homing_projectile&quot;,
+  &quot;manaCost&quot;: 6,
+  &quot;damage&quot;: 5,
+  &quot;speed&quot;: 7,
+  &quot;lifetime&quot;: 5,
+  &quot;targetRange&quot;: 8,
+  &quot;turnRate&quot;: 120,
+  &quot;color&quot;: &quot;CF89FF&quot;,
+  &quot;requires&quot;: []
+}
+</code></pre>
+<p><code>damage</code> is fixed magic damage before target defenses (1–10000). <code>speed</code> is world units/second (0.1–30); <code>lifetime</code> is seconds (0.1–20); <code>color</code> is six-digit RGB without #. Homing uses <code>targetRange</code> in world units (0.1–30) and <code>turnRate</code> in degrees/second (1–720).</p>
+<p>The missile acquires a live hostile Monster ahead of it across clear world geometry, retains a valid target, and can reacquire after loss. It flies straight without a target and uses stock wall/entity impacts. This is steering, not obstacle navigation; dynamic obstacles may intercept it. Projectiles expire and are not persisted in saves. Summons, bouncing and piercing still need future work.</p><h2>Migration and validation</h2><p>Definition edits affect saved wands after restarting. Preset spell-list edits affect newly created items; saved wands retain their IDs and selection. Old per-wand <code>manaCost</code>, <code>healManaCost</code> and <code>healAmount</code> fields remain readable but JSON now supersedes them. Put custom values in separate definitions and reference their IDs.</p><p>Definitions load from enabled mods in sorted filename order within each directory. Duplicate IDs are rejected. Invalid definitions fail the startup spell check and disable casting until corrected and restarted. Skill trees, point spending and permanent unlocks are not implemented.</p><p id="copy-status" role="status" aria-live="polite"></p></main></div><footer><span>Realms of Fate modding wiki</span><span>Checked against the mod implementation Â· October 6, 2026</span></footer></body></html>

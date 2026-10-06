@@ -1,0 +1,14 @@
+{
+  "id": "seeking_missile",
+  "name": "Seeking Missile",
+  "icon": "ui/spells/seeking-missile.png",
+  "effect": "homing_projectile",
+  "manaCost": 6,
+  "damage": 5,
+  "speed": 7,
+  "lifetime": 5,
+  "targetRange": 8,
+  "turnRate": 120,
+  "color": "CF89FF",
+  "requires": []
+}

@@ -15,7 +15,7 @@ The main documentation now describes the mod, not the separate engine fork.
 - `examples/achievements/`: retained legacy examples.
 
 Checked against the prototype source on October 6, 2026. Mac/Linux, Workshop
-publication, skill trees, homing spells and permanent progression are not claimed
+publication, skill trees and permanent progression are not claimed
 as implemented. The manual patch is version-specific; consult its guide/hash.
 
 ## Preview and validation
