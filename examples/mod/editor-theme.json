@@ -1,0 +1,24 @@
+{
+  "name": "Realms of Fate - Slate",
+  "enabled": true,
+  "text": "D1D6DE",
+  "heading": "4DB3FF",
+  "panel": "252B35",
+  "input": "323B49",
+  "selection": "356A9E",
+  "button": "394658",
+  "categoryColors": {
+    "Basic": "B3BECF",
+    "Realms of Fate Classes": "BC94ED",
+    "Items": "EBC66B",
+    "Collectables": "EBC66B",
+    "Monsters": "EB8585",
+    "NPCs": "8BD2A5",
+    "Lights": "F1DB8B",
+    "Particles": "8BCBE5",
+    "Triggers": "D2A1EB",
+    "Spawners": "D2A1EB",
+    "Areas": "D2A1EB",
+    "Movers": "D2A1EB"
+  }
+}

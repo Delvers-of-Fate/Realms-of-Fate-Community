@@ -1,0 +1,6 @@
+{
+    "currencies": [
+        { "id": "gold", "name": "Gold", "spriteAtlas": "item", "tex": 89 },
+        { "id": "guild_tokens", "name": "Guild Tokens", "spriteAtlas": "item", "tex": 88 }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+  "achievements": [
+    {
+      "id": "defeat_crypt_warden",
+      "name": "The Warden Falls",
+      "description": "Defeat the Crypt Warden.",
+      "category": "Combat",
+      "event": "KILL_BOSS",
+      "target": "crypt_warden",
+      "required": 1,
+      "iconAtlas": "item",
+      "iconTex": 89
+    }
+  ]
+}

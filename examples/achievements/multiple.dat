@@ -1,0 +1,28 @@
+{
+  "achievements": [
+    {
+      "id": "explore_ancient_depths",
+      "name": "Into the Depths",
+      "description": "Discover the crypt and the sunken library.",
+      "category": "Exploration",
+      "iconAtlas": "item",
+      "iconTex": 89,
+      "requirements": [
+        {
+          "id": "crypt",
+          "label": "Discover the crypt",
+          "event": "EVENT_COMPLETE",
+          "target": "forgotten_crypt_discovered",
+          "required": 1
+        },
+        {
+          "id": "library",
+          "label": "Discover the library",
+          "event": "EVENT_COMPLETE",
+          "target": "sunken_library_discovered",
+          "required": 1
+        }
+      ]
+    }
+  ]
+}

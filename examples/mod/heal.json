@@ -1,0 +1,9 @@
+{
+  "id": "heal",
+  "name": "Heal",
+  "icon": "ui/spells/heal.png",
+  "effect": "heal",
+  "manaCost": 8,
+  "healAmount": 3,
+  "requires": []
+}

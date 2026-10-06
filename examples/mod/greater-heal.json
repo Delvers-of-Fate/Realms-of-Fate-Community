@@ -1,0 +1,11 @@
+{
+  "id": "greater_heal",
+  "name": "Greater Heal",
+  "icon": "ui/spells/heal.png",
+  "effect": "heal",
+  "manaCost": 12,
+  "healAmount": 6,
+  "requires": [
+    "heal"
+  ]
+}

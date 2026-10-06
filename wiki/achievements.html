@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Copyable JSON examples and editor setup for Realms of Fate mods.">
+<title>Achievements · Realms of Fate</title>
+<link rel="stylesheet" href="../assets/wiki.css">
+<script src="../assets/wiki.js" defer>
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="brand" href="../index.html">Realms of Fate <span>Community</span></a>
+  <nav aria-label="Site"><a href="../index.html">Home</a><a href="../index.html#downloads">Downloads</a><a href="index.html">Modding</a><a href="https://github.com/Delvers-of-Fate/Realms-of-Fate-Community">GitHub</a></nav>
+</header>
+<div class="layout">
+<nav class="sidebar" aria-label="On this page">
+<a href="index.html">Wiki overview</a>
+<p class="nav-heading">On this page</p>
+<a href="#start">File setup</a>
+<a href="#exploration">Discover an area</a>
+<a href="#secrets">Discover a secret</a>
+<a href="#bosses">Defeat a boss</a>
+<a href="#multiple">Discover two different areas</a>
+<a href="#manual">Unlock from a scripted event</a>
+<a href="#icons">Use a custom icon</a>
+<a href="#fields">Field reference</a>
+<a href="#testing">Testing & troubleshooting</a>
+</nav>
+<main id="main" class="article">
+<p class="breadcrumb"><a href="index.html">Modding</a> / Achievements</p>
+<h1>Legacy engine achievements</h1><aside class="note"><strong>Archived engine-fork documentation.</strong> These achievements, fields and triggers have not been ported to the current Delver mod prototype. Do not use these examples as current mod setup instructions. <a href="index.html">Open the current mod guide</a>.</aside>
+<p>Achievements are defined in JSON and advanced by game events or editor triggers. The examples below cover discovery, combat, and scripted unlocks.</p>
+<section id="start">
+<h2>File setup</h2>
+<p>Create <code>data/achievements.dat</code> inside an enabled mod. This guide uses the engine’s default achievement filename. Definitions load through the normal mod stack; later definitions with the same ID replace earlier ones.</p>
+<pre class="tree">YourMod/
+├── data/
+│   └── achievements.dat
+└── ui/
+    └── achievements/
+        └── crypt_warden.png</pre>
+<p>Each block below is a <strong>complete file</strong> you can use as a starting point. To combine examples, copy the object inside <code>achievements</code> into your existing array, separating objects with commas. Use unique IDs unless you intend to replace an achievement.</p>
+<p>
+<strong>Values to change:</strong> change the achievement’s <code>id</code>, <code>name</code>, <code>description</code> and <code>category</code>. When changing a named <code>target</code>, update the matching editor <code>eventTarget</code> or monster <code>achievementTarget</code> too. Keep the event name shown in the example unless you want a different action to advance it.</p>
+<aside class="note">In DelvEdit, place achievement triggers through <strong>Logic → Triggers → Achievement</strong>. The JSON defines the reward; the trigger or monster reports what happened.</aside>
+</section>
+<section id="exploration" class="recipe">
+<h2>Discover an area</h2>
+<p>Report a named event when the player crosses an entrance.</p>
+<div class="code-panel">
+<div class="code-toolbar">
+<span>data/achievements.dat · complete file</span>
+<div>
+<a download="achievements.dat" href="../examples/achievements/exploration.dat">Download</a>
+<button type="button" data-copy="code-exploration" aria-label="Copy JSON for discover an area">Copy JSON</button>
+</div>
+</div>
+<pre>
+<code id="code-exploration" class="language-json">{
+  &quot;achievements&quot;: [
+    {
+      &quot;id&quot;: &quot;discover_forgotten_crypt&quot;,
+      &quot;name&quot;: &quot;Below the Forgotten&quot;,
+      &quot;description&quot;: &quot;Discover the Forgotten Crypt.&quot;,
+      &quot;category&quot;: &quot;Exploration&quot;,
+      &quot;event&quot;: &quot;EVENT_COMPLETE&quot;,
+      &quot;target&quot;: &quot;forgotten_crypt_discovered&quot;,
+      &quot;required&quot;: 1,
+      &quot;iconAtlas&quot;: &quot;item&quot;,
+      &quot;iconTex&quot;: 89
+    }
+  ]
+}
+</code>
+</pre>
+</div>
+<h3>Editor setup</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>triggerType</code>
+</td>
+<td>
+<code>PLAYER_TOUCHED</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>triggerResets</code>
+</td>
+<td>
+<code>false</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>reportEvent</code>
+</td>
+<td>
+<code>true</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>eventType</code>
+</td>
+<td>
+<code>EVENT_COMPLETE</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>eventTarget</code>
+</td>
+<td>
+<code>forgotten_crypt_discovered</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>amount</code>
+</td>
+<td>
+<code>1</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>isSecret</code>
+</td>
+<td>
+<code>false</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Place an Achievement trigger across the entrance and resize its collision bounds to cover the player’s path. Leave achievementId blank in event mode. Returning on another run can report the event again; required: 1 makes this a one-time unlock.</p>
+</section>
+<section id="secrets" class="recipe">
+<h2>Discover a secret</h2>
+<p>Use the secret event already emitted by a regular trigger.</p>
+<div class="code-panel">
+<div class="code-toolbar">
+<span>data/achievements.dat · complete file</span>
+<div>
+<a download="achievements.dat" href="../examples/achievements/secrets.dat">Download</a>
+<button type="button" data-copy="code-secrets" aria-label="Copy JSON for discover a secret">Copy JSON</button>
+</div>
+</div>
+<pre>
+<code id="code-secrets" class="language-json">{
+  &quot;achievements&quot;: [
+    {
+      &quot;id&quot;: &quot;find_a_secret&quot;,
+      &quot;name&quot;: &quot;Behind the Walls&quot;,
+      &quot;description&quot;: &quot;Discover a secret.&quot;,
+      &quot;category&quot;: &quot;Exploration&quot;,
+      &quot;event&quot;: &quot;DISCOVER_SECRET&quot;,
+      &quot;target&quot;: &quot;*&quot;,
+      &quot;required&quot;: 1,
+      &quot;iconAtlas&quot;: &quot;item&quot;,
+      &quot;iconTex&quot;: 89
+    }
+  ]
+}
+</code>
+</pre>
+</div>
+<h3>Editor setup</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>triggerType</code>
+</td>
+<td>
+<code>PLAYER_TOUCHED</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>triggerResets</code>
+</td>
+<td>
+<code>false</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>isSecret</code>
+</td>
+<td>
+<code>true</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Use a regular Trigger for the secret area. It reports DISCOVER_SECRET automatically when fired. The wildcard target accepts any secret. Do not also report the same event through an Achievement trigger: that would count it twice. For a specific secret, the event target is the trigger’s runtime entity ID; generated level chunks may prefix entity IDs. A named EVENT_COMPLETE event is easier to keep stable for a specific location.</p>
+</section>
+<section id="bosses" class="recipe">
+<h2>Defeat a boss</h2>
+<p>Let the monster report its death to the achievement system.</p>
+<div class="code-panel">
+<div class="code-toolbar">
+<span>data/achievements.dat · complete file</span>
+<div>
+<a download="achievements.dat" href="../examples/achievements/bosses.dat">Download</a>
+<button type="button" data-copy="code-bosses" aria-label="Copy JSON for defeat a boss">Copy JSON</button>
+</div>
+</div>
+<pre>
+<code id="code-bosses" class="language-json">{
+  &quot;achievements&quot;: [
+    {
+      &quot;id&quot;: &quot;defeat_crypt_warden&quot;,
+      &quot;name&quot;: &quot;The Warden Falls&quot;,
+      &quot;description&quot;: &quot;Defeat the Crypt Warden.&quot;,
+      &quot;category&quot;: &quot;Combat&quot;,
+      &quot;event&quot;: &quot;KILL_BOSS&quot;,
+      &quot;target&quot;: &quot;crypt_warden&quot;,
+      &quot;required&quot;: 1,
+      &quot;iconAtlas&quot;: &quot;item&quot;,
+      &quot;iconTex&quot;: 89
+    }
+  ]
+}
+</code>
+</pre>
+</div>
+<h3>Editor setup</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>isBoss</code>
+</td>
+<td>
+<code>true</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>achievementTarget</code>
+</td>
+<td>
+<code>crypt_warden</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Set these fields in the monster’s Achievements group. No separate Achievement trigger is needed. KILL_BOSS is reported only when the final damage is attributed to the player. Set an explicit achievementTarget so renaming the monster does not change which achievement it advances.</p>
+</section>
+<section id="multiple" class="recipe">
+<h2>Discover two different areas</h2>
+<p>Give each location its own permanent requirement ID.</p>
+<div class="code-panel">
+<div class="code-toolbar">
+<span>data/achievements.dat · complete file</span>
+<div>
+<a download="achievements.dat" href="../examples/achievements/multiple.dat">Download</a>
+<button type="button" data-copy="code-multiple" aria-label="Copy JSON for discover two different areas">Copy JSON</button>
+</div>
+</div>
+<pre>
+<code id="code-multiple" class="language-json">{
+  &quot;achievements&quot;: [
+    {
+      &quot;id&quot;: &quot;explore_ancient_depths&quot;,
+      &quot;name&quot;: &quot;Into the Depths&quot;,
+      &quot;description&quot;: &quot;Discover the crypt and the sunken library.&quot;,
+      &quot;category&quot;: &quot;Exploration&quot;,
+      &quot;iconAtlas&quot;: &quot;item&quot;,
+      &quot;iconTex&quot;: 89,
+      &quot;requirements&quot;: [
+        {
+          &quot;id&quot;: &quot;crypt&quot;,
+          &quot;label&quot;: &quot;Discover the crypt&quot;,
+          &quot;event&quot;: &quot;EVENT_COMPLETE&quot;,
+          &quot;target&quot;: &quot;forgotten_crypt_discovered&quot;,
+          &quot;required&quot;: 1
+        },
+        {
+          &quot;id&quot;: &quot;library&quot;,
+          &quot;label&quot;: &quot;Discover the library&quot;,
+          &quot;event&quot;: &quot;EVENT_COMPLETE&quot;,
+          &quot;target&quot;: &quot;sunken_library_discovered&quot;,
+          &quot;required&quot;: 1
+        }
+      ]
+    }
+  ]
+}
+</code>
+</pre>
+</div>
+<h3>Editor setup</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>reportEvent</code>
+</td>
+<td>
+<code>true</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>eventType</code>
+</td>
+<td>
+<code>EVENT_COMPLETE</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>eventTarget</code>
+</td>
+<td>
+<code>One location target per trigger</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>triggerType</code>
+</td>
+<td>
+<code>PLAYER_TOUCHED</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>triggerResets</code>
+</td>
+<td>
+<code>false</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Place one Achievement trigger at each location. Use forgotten_crypt_discovered on the first and sunken_library_discovered on the second. Separate requirements ensure visiting the same location twice cannot complete both. When requirements is present, it replaces the top-level event, target and required fields.</p>
+</section>
+<section id="manual" class="recipe">
+<h2>Unlock from a scripted event</h2>
+<p>Address a single achievement directly from level logic.</p>
+<div class="code-panel">
+<div class="code-toolbar">
+<span>data/achievements.dat · complete file</span>
+<div>
+<a download="achievements.dat" href="../examples/achievements/manual.dat">Download</a>
+<button type="button" data-copy="code-manual" aria-label="Copy JSON for unlock from a scripted event">Copy JSON</button>
+</div>
+</div>
+<pre>
+<code id="code-manual" class="language-json">{
+  &quot;achievements&quot;: [
+    {
+      &quot;id&quot;: &quot;complete_warden_encounter&quot;,
+      &quot;name&quot;: &quot;Silence in the Crypt&quot;,
+      &quot;description&quot;: &quot;Complete the Warden encounter.&quot;,
+      &quot;category&quot;: &quot;Combat&quot;,
+      &quot;event&quot;: &quot;MANUAL&quot;,
+      &quot;target&quot;: &quot;*&quot;,
+      &quot;required&quot;: 1,
+      &quot;iconAtlas&quot;: &quot;item&quot;,
+      &quot;iconTex&quot;: 89
+    }
+  ]
+}
+</code>
+</pre>
+</div>
+<h3>Editor setup</h3>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>id</code>
+</td>
+<td>
+<code>warden_achievement_trigger</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>triggerType</code>
+</td>
+<td>
+<code>USE</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>triggerResets</code>
+</td>
+<td>
+<code>false</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>reportEvent</code>
+</td>
+<td>
+<code>false</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>achievementId</code>
+</td>
+<td>
+<code>complete_warden_encounter</code>
+</td>
+</tr>
+<tr>
+<td>
+<code>unlockImmediately</code>
+</td>
+<td>
+<code>true</code>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Place this Achievement trigger out of player reach. On the boss, set triggersOnDeath to warden_achievement_trigger. This awards encounter completion regardless of who dealt the final damage. Keep any existing death-trigger wiring: if the boss already targets other level logic, connect the achievement through that chain rather than overwriting it. The trigger’s entity id is the wiring address; achievementId selects the JSON achievement.</p>
+</section>
+<section id="icons" class="recipe">
+<h2>Use a custom icon</h2>
+<p>Show your artwork in the browser and the unlock popup.</p>
+<div class="code-panel">
+<div class="code-toolbar">
+<span>data/achievements.dat · complete file</span>
+<div>
+<a download="achievements.dat" href="../examples/achievements/icons.dat">Download</a>
+<button type="button" data-copy="code-icons" aria-label="Copy JSON for use a custom icon">Copy JSON</button>
+</div>
+</div>
+<pre>
+<code id="code-icons" class="language-json">{
+  &quot;achievements&quot;: [
+    {
+      &quot;id&quot;: &quot;defeat_crypt_warden&quot;,
+      &quot;name&quot;: &quot;The Warden Falls&quot;,
+      &quot;description&quot;: &quot;Defeat the Crypt Warden.&quot;,
+      &quot;category&quot;: &quot;Combat&quot;,
+      &quot;event&quot;: &quot;KILL_BOSS&quot;,
+      &quot;target&quot;: &quot;crypt_warden&quot;,
+      &quot;required&quot;: 1,
+      &quot;iconAtlas&quot;: &quot;item&quot;,
+      &quot;iconTex&quot;: 89,
+      &quot;iconPath&quot;: &quot;ui/achievements/crypt_warden.png&quot;
+    }
+  ]
+}
+</code>
+</pre>
+</div>
+<p>Save a square transparent PNG at YourMod/ui/achievements/crypt_warden.png. A simple 32 × 32 icon fits the game’s pixel art. Supply your own PNG; it is not included in this example. iconPath takes priority over iconAtlas and iconTex. Use forward slashes and a path relative to the mod root. A missing file currently produces a cyan error texture, so check the path if that appears. This example replaces the boss example with the same achievement ID; do not add both entries.</p>
+</section>
+<section id="fields">
+<h2>Field reference</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>id</code>
+</td>
+<td>Required stable ID</td>
+<td>Keep this unchanged after release. Achievement IDs are matched without case sensitivity.</td>
+</tr>
+<tr>
+<td>
+<code>name / description</code>
+</td>
+<td>Achievement / empty</td>
+<td>Visible title and explanation.</td>
+</tr>
+<tr>
+<td>
+<code>category</code>
+</td>
+<td>General</td>
+<td>Groups achievements in the browser.</td>
+</tr>
+<tr>
+<td>
+<code>hidden</code>
+</td>
+<td>false</td>
+<td>Conceals the name, icon and details until unlocked.</td>
+</tr>
+<tr>
+<td>
+<code>event</code>
+</td>
+<td>MANUAL</td>
+<td>Event enum, such as EVENT_COMPLETE, DISCOVER_SECRET or KILL_BOSS. Use the exact uppercase spelling.</td>
+</tr>
+<tr>
+<td>
+<code>target</code>
+</td>
+<td>*</td>
+<td>Event target. Empty or * matches any target; named targets match without case sensitivity.</td>
+</tr>
+<tr>
+<td>
+<code>required</code>
+</td>
+<td>1</td>
+<td>Positive progress needed to unlock.</td>
+</tr>
+<tr>
+<td>
+<code>requirements</code>
+</td>
+<td>null</td>
+<td>Optional array of individual goals. Each has id, label, event, target and required. All must complete.</td>
+</tr>
+<tr>
+<td>
+<code>iconAtlas / iconTex</code>
+</td>
+<td>item / 89</td>
+<td>Registered atlas name and sprite index.</td>
+</tr>
+<tr>
+<td>
+<code>iconPath</code>
+</td>
+<td>null</td>
+<td>Standalone image path relative to the mod root. Overrides atlas artwork.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<aside class="note">
+<strong>Keep requirement IDs permanent.</strong> They are case-sensitive save keys. Older requirements without IDs use their array positions: keep their order unchanged. Adding IDs to shipped anonymous requirements needs a save migration. Duplicate requirement keys are rejected during loading.</aside>
+</section>
+<section id="testing">
+<h2>Test before sharing</h2>
+<ol>
+<li>Enable your mod and restart or reload the game so its definitions load.</li>
+<li>Use DelvEdit play testing to fire the trigger or defeat the boss. Preview achievements use temporary progress and do not change your real profile.</li>
+<li>Check the unlock popup and the achievement browser. Hidden achievements reveal their artwork and details only after unlocking.</li>
+<li>For multi-step goals, complete one requirement at a time and verify each advances independently.</li>
+</ol>
+<h3>If nothing unlocks</h3>
+<ul>
+<li>Check event names, target values and the JSON file’s achievements array.</li>
+<li>With <code>reportEvent = true</code>, the trigger uses eventType and eventTarget; achievementId and unlockImmediately are ignored.</li>
+<li>With <code>reportEvent = false</code>, use achievementId. Leave the legacy achievementName field empty.</li>
+<li>Direct progress advances only the first MANUAL requirement in a multi-step achievement. Prefer event mode for multiple goals.</li>
+<li>A trigger with triggerResets = false fires once for that instance, not once for the entire profile. Repeated runs can increase counters.</li>
+<li>Already unlocked achievements do not unlock again in the normal profile. Use editor preview for repeated testing.</li>
+</ul>
+</section>
+<p role="status" aria-live="polite" id="copy-status"></p>
+</main>
+</div>
+<footer><span>Realms of Fate modding wiki</span><span>Examples checked against the engine source on 28 September 2026.</span></footer>
+</body>
+</html>

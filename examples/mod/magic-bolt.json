@@ -1,0 +1,8 @@
+{
+  "id": "bolt",
+  "name": "Magic Bolt",
+  "icon": "ui/spells/magic-bolt.png",
+  "effect": "wand_projectile",
+  "manaCost": 4,
+  "requires": []
+}

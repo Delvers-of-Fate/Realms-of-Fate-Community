@@ -1,0 +1,5 @@
+{
+  "class": "com.realmsoffate.classes.CurrencyPickup",
+  "currencyId": "guild_tokens",
+  "amount": 5
+}

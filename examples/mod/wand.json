@@ -1,0 +1,10 @@
+{
+  "class": "com.realmsoffate.classes.ManaWand",
+  "name": "Apprentice Focus",
+  "spells": [
+    "bolt",
+    "heal"
+  ],
+  "selectedSpell": 0,
+  "cycleKey": 46
+}

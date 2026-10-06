@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Realms of Fate Delver mod prototype: Classes, movement and currencies"><title>Classes, movement and currencies · Realms of Fate</title><link rel="stylesheet" href="../assets/wiki.css"><script src="../assets/wiki.js" defer></script></head><body>
+<a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="brand" href="../index.html">Realms of Fate <span>Community</span></a><nav aria-label="Site"><a href="../index.html">Home</a><a href="installation.html">Installation</a><a href="index.html">Modding wiki</a><a href="https://github.com/Delvers-of-Fate/Realms-of-Fate-Community">GitHub</a></nav></header>
+<div class="layout"><nav class="sidebar" aria-label="Wiki navigation"><p class="nav-heading">Delver mod prototype</p><a href="index.html">Overview</a><a href="installation.html">Install & restore</a><a href="spells.html">Spells & wands</a><a href="systems.html" class="current" aria-current="page">Classes & currencies</a><a href="editor.html">Editor & startup</a><p class="nav-heading">Archive</p><a href="achievements.html">Legacy engine achievements</a></nav><main id="main" class="article"><p class="breadcrumb">Wiki / Delver mod prototype</p><h1>Classes, movement and currencies</h1>
+<h2>Class selection and mana</h2><p>Use the Class Tome to choose Mage or Fighter once per run. It applies the class stats and starter items. Mage starts with 8 health and 24 mana, regenerating 1 mana/second; Fighter starts with 12 health and 12 mana, regenerating 0.5/second. These values are editable in <code>data/rof-classes.json</code>.</p><p><a href="../examples/mod/rof-classes.json" download>Download the current class definitions</a>. The old per-item cost fields in that file are legacy compatibility fields; spell JSON supplies the actual costs.</p><p>Mana and class state save with the player. The blue mana meter is above health. The retired three-ability Arcanist experiment is not the current control scheme; retained old-save fields do not reactivate it.</p>
+<h2>Movement</h2><p>Hold Left Shift while moving forward to sprint (1.65×). Hold Left Ctrl to crouch (0.45×). Standing checks for overhead clearance. These keys are currently fixed; configurable keys, stamina and controller support remain future work.</p>
+<h2>Define currencies</h2><p>Save as <code>data/currencies.json</code>. IDs are stable save keys. The atlas/tex fields reference installed sprites for placeholder pickup appearance; no game artwork is distributed by these examples.</p><p><button type="button" data-copy="code-currencies">Copy JSON</button> <a href="../examples/mod/currencies.json" download>Download JSON</a></p><pre><code class="language-json" id="code-currencies" data-download="../examples/mod/currencies.json">{
+    &quot;currencies&quot;: [
+        { &quot;id&quot;: &quot;gold&quot;, &quot;name&quot;: &quot;Gold&quot;, &quot;spriteAtlas&quot;: &quot;item&quot;, &quot;tex&quot;: 89 },
+        { &quot;id&quot;: &quot;guild_tokens&quot;, &quot;name&quot;: &quot;Guild Tokens&quot;, &quot;spriteAtlas&quot;: &quot;item&quot;, &quot;tex&quot;: 88 }
+    ]
+}
+</code></pre>
+<p>Currency IDs accept lowercase letters, digits, underscore, dot, colon and hyphen, starting with a letter/digit. Multiple mods merge in load order; later currency definitions override matching IDs. Gold stays in the stock balance. Custom balances appear in the Character window and are saved per run, not as account currency.</p>
+<h2>Place a pickup</h2><p>In DelvEdit: Place Entity → Realms of Fate Classes → Guild Tokens - 5. Set <code>currencyId</code> and <code>amount</code>. Nearby collection is the default; <code>autoCollect: false</code> requires use/pickup. Alternatively, this object can go in a monster's explicit <code>loot</code> array:</p><p><button type="button" data-copy="code-pickup">Copy JSON</button> <a href="../examples/mod/pickup.json" download>Download JSON</a></p><pre><code class="language-json" id="code-pickup" data-download="../examples/mod/pickup.json">{
+  &quot;class&quot;: &quot;com.realmsoffate.classes.CurrencyPickup&quot;,
+  &quot;currencyId&quot;: &quot;guild_tokens&quot;,
+  &quot;amount&quot;: 5
+}
+</code></pre>
+<p>These presets do not automatically populate existing dungeon loot. Unknown currencies and nonpositive pickup amounts are rejected.</p>
+<h2>Custom-currency shops</h2><p>Place Guild Exchange, or configure a CurrencyShop entity/preset in <code>data/entities.dat</code>. Use its trigger or assign it as an NPC use trigger. This is an entity object, not an automatically loaded standalone JSON file.</p><p><button type="button" data-copy="code-shop">Copy JSON</button> <a href="../examples/mod/shop.json" download>Download JSON</a></p><pre><code class="language-json" id="code-shop" data-download="../examples/mod/shop.json">{
+  &quot;class&quot;: &quot;com.realmsoffate.classes.CurrencyShop&quot;,
+  &quot;title&quot;: &quot;Guild Exchange&quot;,
+  &quot;currencyId&quot;: &quot;guild_tokens&quot;,
+  &quot;offers&quot;: [
+    {
+      &quot;cost&quot;: 5,
+      &quot;stock&quot;: 1,
+      &quot;item&quot;: {
+        &quot;class&quot;: &quot;com.realmsoffate.classes.ManaWand&quot;,
+        &quot;name&quot;: &quot;Guild Focus&quot;,
+        &quot;spells&quot;: [
+          &quot;bolt&quot;,
+          &quot;heal&quot;
+        ]
+      }
+    }
+  ]
+}
+</code></pre>
+<p>An offer can override <code>currencyId</code>; otherwise it uses the shop's currency. <code>stock</code> counts purchases available. Purchasing requires a free inventory slot; payment follows validation and item creation. Shops currently sell items, not stat upgrades, and do not buy from players. Stock shops still use gold.</p><p id="copy-status" role="status" aria-live="polite"></p></main></div><footer><span>Realms of Fate modding wiki</span><span>Checked against the mod implementation · October 6, 2026</span></footer></body></html>

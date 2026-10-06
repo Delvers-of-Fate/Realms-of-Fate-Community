@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Realms of Fate Delver mod prototype: Editor themes and startup checks"><title>Editor themes and startup checks · Realms of Fate</title><link rel="stylesheet" href="../assets/wiki.css"><script src="../assets/wiki.js" defer></script></head><body>
+<a class="skip" href="#main">Skip to content</a><header class="site-header"><a class="brand" href="../index.html">Realms of Fate <span>Community</span></a><nav aria-label="Site"><a href="../index.html">Home</a><a href="installation.html">Installation</a><a href="index.html">Modding wiki</a><a href="https://github.com/Delvers-of-Fate/Realms-of-Fate-Community">GitHub</a></nav></header>
+<div class="layout"><nav class="sidebar" aria-label="Wiki navigation"><p class="nav-heading">Delver mod prototype</p><a href="index.html">Overview</a><a href="installation.html">Install & restore</a><a href="spells.html">Spells & wands</a><a href="systems.html">Classes & currencies</a><a href="editor.html" class="current" aria-current="page">Editor & startup</a><p class="nav-heading">Archive</p><a href="achievements.html">Legacy engine achievements</a></nav><main id="main" class="article"><p class="breadcrumb">Wiki / Delver mod prototype</p><h1>Editor themes and startup checks</h1>
+<h2>Editor companion</h2><p>Launch DelvEdit with <code>--enable-mod-classes=true</code>. The companion attaches when the editor loads the Class Tome preset; placing a tome is unnecessary. Restart after changing compiled classes or themes.</p><p>Inspector headers fold/expand groups. Currency IDs use a dropdown populated from the currency definitions; existing unknown IDs remain selectable. Existing enum, boolean, atlas and file controls retain their stock behavior.</p>
+<h2>Theme JSON</h2><p>Edit <code>data/editor-theme.json</code>. Colors accept RRGGBB or RRGGBBAA, optionally prefixed with #. Set enabled to false to retain the stock editor appearance.</p><p><button type="button" data-copy="code-editor-theme">Copy JSON</button> <a href="../examples/mod/editor-theme.json" download>Download JSON</a></p><pre><code class="language-json" id="code-editor-theme" data-download="../examples/mod/editor-theme.json">{
+  &quot;name&quot;: &quot;Realms of Fate - Slate&quot;,
+  &quot;enabled&quot;: true,
+  &quot;text&quot;: &quot;D1D6DE&quot;,
+  &quot;heading&quot;: &quot;4DB3FF&quot;,
+  &quot;panel&quot;: &quot;252B35&quot;,
+  &quot;input&quot;: &quot;323B49&quot;,
+  &quot;selection&quot;: &quot;356A9E&quot;,
+  &quot;button&quot;: &quot;394658&quot;,
+  &quot;categoryColors&quot;: {
+    &quot;Basic&quot;: &quot;B3BECF&quot;,
+    &quot;Realms of Fate Classes&quot;: &quot;BC94ED&quot;,
+    &quot;Items&quot;: &quot;EBC66B&quot;,
+    &quot;Collectables&quot;: &quot;EBC66B&quot;,
+    &quot;Monsters&quot;: &quot;EB8585&quot;,
+    &quot;NPCs&quot;: &quot;8BD2A5&quot;,
+    &quot;Lights&quot;: &quot;F1DB8B&quot;,
+    &quot;Particles&quot;: &quot;8BCBE5&quot;,
+    &quot;Triggers&quot;: &quot;D2A1EB&quot;,
+    &quot;Spawners&quot;: &quot;D2A1EB&quot;,
+    &quot;Areas&quot;: &quot;D2A1EB&quot;,
+    &quot;Movers&quot;: &quot;D2A1EB&quot;
+  }
+}
+</code></pre>
+<p><code>text</code> colors text; <code>heading</code> colors headings; <code>panel</code> colors panels; <code>input</code> colors fields; <code>selection</code> colors selected/hovered rows; <code>button</code> colors buttons. Category names are exact; children inherit category colors. Invalid settings log an error and use defaults.</p><p>This changes editor controls and colors, not the full engine-fork hierarchy, toolbar or OS dialogs. There is no theme picker/live reload yet. Game HUD colors are separate.</p>
+<h2>Startup checks</h2><p>Edit <code>data/rof-startup.json</code>. The optional screen checks classes, currencies, spell definitions/starter wand lists and item presets. It runs after loader activation, not during the game's earlier startup. Its progress counts completed checks, including failures.</p><p><button type="button" data-copy="code-rof-startup">Copy JSON</button> <a href="../examples/mod/rof-startup.json" download>Download JSON</a></p><pre><code class="language-json" id="code-rof-startup" data-download="../examples/mod/rof-startup.json">{
+  &quot;enabled&quot;: true,
+  &quot;title&quot;: &quot;REALMS OF FATE&quot;,
+  &quot;background&quot;: &quot;151B26&quot;,
+  &quot;text&quot;: &quot;E4E9F2&quot;,
+  &quot;accent&quot;: &quot;87B9ED&quot;,
+  &quot;error&quot;: &quot;F29B91&quot;,
+  &quot;autoCloseSeconds&quot;: 1
+}
+</code></pre>
+<p>Successful checks close after autoCloseSeconds (0–10). Errors stay visible until Continue anyway or Enter; the log has details. enabled:false bypasses the screen. It does not appear inside DelvEdit. The intro handoff resets its logo animation to avoid duplicate logos.</p><p id="copy-status" role="status" aria-live="polite"></p></main></div><footer><span>Realms of Fate modding wiki</span><span>Checked against the mod implementation · October 6, 2026</span></footer></body></html>

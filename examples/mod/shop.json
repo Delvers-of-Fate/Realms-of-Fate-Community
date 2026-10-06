@@ -1,0 +1,19 @@
+{
+  "class": "com.realmsoffate.classes.CurrencyShop",
+  "title": "Guild Exchange",
+  "currencyId": "guild_tokens",
+  "offers": [
+    {
+      "cost": 5,
+      "stock": 1,
+      "item": {
+        "class": "com.realmsoffate.classes.ManaWand",
+        "name": "Guild Focus",
+        "spells": [
+          "bolt",
+          "heal"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "achievements": [
+    {
+      "id": "discover_forgotten_crypt",
+      "name": "Below the Forgotten",
+      "description": "Discover the Forgotten Crypt.",
+      "category": "Exploration",
+      "event": "EVENT_COMPLETE",
+      "target": "forgotten_crypt_discovered",
+      "required": 1,
+      "iconAtlas": "item",
+      "iconTex": 89
+    }
+  ]
+}
