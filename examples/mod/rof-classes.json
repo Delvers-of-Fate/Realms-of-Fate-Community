@@ -1,19 +1,47 @@
 [
-    {
-        "id": "mage", "displayName": "Mage",
-        "description": "Magic focus. Regenerates 1 mana each second.",
-        "health": 8, "mana": 24, "manaPerSecond": 1,
-        "atk": 3, "def": 3, "dex": 4, "spd": 4, "mag": 6, "end": 4,
-        "startingItems": [ { "class": "com.realmsoffate.classes.ManaWand", "manaCost": 4 } ]
-    },
-    {
-        "id": "fighter", "displayName": "Fighter",
-        "description": "More health and strength. Regenerates 0.5 mana each second.",
-        "health": 12, "mana": 12, "manaPerSecond": 0.5,
-        "atk": 6, "def": 5, "dex": 4, "spd": 4, "mag": 2, "end": 5,
-        "startingItems": [
-            { "class": "com.interrupt.dungeoneer.entities.items.Sword", "itemType": "sword", "name": "Initiate Blade", "tex": 0, "spriteAtlas": "melee", "baseDamage": 2, "randDamage": 1 },
-            { "class": "com.realmsoffate.classes.ManaWand", "manaCost": 4 }
-        ]
-    }
+  {
+    "id": "mage",
+    "displayName": "Mage",
+    "description": "Magic focus. Regenerates 1 mana each second.",
+    "health": 8,
+    "mana": 24,
+    "manaPerSecond": 1,
+    "atk": 3,
+    "def": 3,
+    "dex": 4,
+    "spd": 4,
+    "mag": 6,
+    "end": 4,
+    "startingItems": [
+      {
+        "class": "com.realmsoffate.classes.ManaWand",
+        "manaCost": 4
+      }
+    ]
+  },
+  {
+    "id": "fighter",
+    "displayName": "Fighter",
+    "description": "Start with a blade and greater strength for close combat. Found mana wands offer occasional support, with slower mana recovery.",
+    "health": 12,
+    "mana": 12,
+    "manaPerSecond": 0.5,
+    "atk": 6,
+    "def": 5,
+    "dex": 4,
+    "spd": 4,
+    "mag": 2,
+    "end": 5,
+    "startingItems": [
+      {
+        "class": "com.interrupt.dungeoneer.entities.items.Sword",
+        "itemType": "sword",
+        "name": "Initiate Blade",
+        "tex": 0,
+        "spriteAtlas": "melee",
+        "baseDamage": 2,
+        "randDamage": 1
+      }
+    ]
+  }
 ]
